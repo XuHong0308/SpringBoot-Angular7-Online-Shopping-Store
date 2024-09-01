@@ -2,9 +2,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: root
-    url: jdbc:postgresql://localhost/postgres
+     url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     platform: postgres
     initialization-mode: always
     continue-on-error: true
