@@ -37,11 +37,11 @@ jobs:
           # Skip creating the postgres user as it already exists
 
       - name: Build Backend
-        working-directory: ./backend  # Adjust this to the correct path
+        working-directory: ./backend 
         run: mvn install
 
       - name: Run Backend Tests
-        working-directory: ./backend  # Adjust this to the correct path
+        working-directory: ./backend  
         env:
           DATABASE_URL: "jdbc:postgresql://localhost:5432/mydatabase"
           DATABASE_USER: "postgres"
@@ -49,8 +49,15 @@ jobs:
         run: mvn test
 
       - name: Generate Backend Reports
-        working-directory: ./backend  # Adjust this to the correct path
-        run: mvn surefire-report:report
+        working-directory: ./backend  
+        run: mvn surefire-report:report-only
+
+      - name: Upload Surefire Report
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: surefire-report
+          path: backend/target/site/surefire-report.html  # Path to the report
 
   frontend:
     name: Build and Test Frontend
