@@ -79,11 +79,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set Node options for OpenSSL
+        run: echo "NODE_OPTIONS=--openssl-legacy-provider" >> $GITHUB_ENV
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18.20.4'
-          
+
       - name: Install Dependencies
         working-directory: ./frontend  # Adjust this to the correct path
         run: npm install
