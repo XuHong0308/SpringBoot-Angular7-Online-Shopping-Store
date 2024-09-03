@@ -104,10 +104,6 @@ jobs:
           path: frontend/bundle-report.html
           if-no-files-found: warn
 
-      # - name: Run Frontend Tests
-      #   working-directory: ./frontend  # Adjust this to the correct path
-      #   run: npm test
-
-      # - name: Generate Coverage Report
-      #   working-directory: ./frontend  # Adjust this to the correct path
-      #   run: npm test -- --coverage
+      - name: Run Frontend Tests
+        working-directory: ./frontend  # Adjust this to the correct path
+        run: npm test
