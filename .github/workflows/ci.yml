@@ -102,8 +102,14 @@ jobs:
         with:
           name: bundle-report
           path: frontend/bundle-report.html
-          if-no-files-found: warn
 
       - name: Run Frontend Tests
         working-directory: ./frontend  # Adjust this to the correct path
         run: npm test
+
+      - name: Upload Frontend Test Report
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-test-report
+          path: frontend/coverage/index.html
