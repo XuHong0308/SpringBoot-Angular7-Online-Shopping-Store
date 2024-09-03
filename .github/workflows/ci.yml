@@ -1,4 +1,4 @@
-name: CI Pipelinee
+name: CI Pipeline
 
 on:
   push:
@@ -23,22 +23,34 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
-      - name: Set up PostgreSQL
+      - name: Install PostgreSQL
         run: sudo apt-get install -y postgresql postgresql-contrib
 
       - name: Start PostgreSQL service
-        run: sudo service postgresql start
+        run: |
+          sudo service postgresql start
+          sudo -u postgres psql -c "SHOW server_version;"
 
       - name: Set up PostgreSQL DB and user
         run: |
           sudo -u postgres psql -c "CREATE DATABASE mydatabase;"
-          sudo -u postgres psql -c "CREATE USER myuser WITH ENCRYPTED PASSWORD 'mypassword';"
-          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE mydatabase TO myuser;"
+          sudo -u postgres psql -c "CREATE USER postgres WITH ENCRYPTED PASSWORD '12345678';"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE mydatabase TO postgres;"
+
+      - name: Configure PostgreSQL to allow external connections (Optional)
+        run: |
+          echo "host all  all    0.0.0.0/0  md5" | sudo tee -a /etc/postgresql/*/main/pg_hba.conf
+          echo "listen_addresses='*'" | sudo tee -a /etc/postgresql/*/main/postgresql.conf
+          sudo service postgresql restart
 
       - name: Build Backend
         run: mvn install
 
       - name: Run Backend Tests
+        env:
+          DATABASE_URL: "jdbc:postgresql://localhost:5432/mydatabase"
+          DATABASE_USER: "postgres"
+          DATABASE_PASSWORD: "12345678"
         run: mvn test
 
       - name: Generate Backend Reports
