@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "analyze": "webpack-bundle-analyzer dist/shop/stats.json --mode static --report ./bundle-report.html"
+    "analyze": "webpack-bundle-analyzer dist/shop/stats.json --mode static --no-open --report ./bundle-report.html"
   },
   "private": true,
   "dependencies": {
