@@ -47,20 +47,13 @@ jobs:
           DATABASE_PASSWORD: "E@91e2l52"
         run: mvn test
 
-      - name: Generate Maven Site Report
-        working-directory: ./backend  
-        run: mvn clean site
-
       - name: Generate Surefire Report
-        working-directory: ./backend  
+        working-directory: ./backend  # Adjust this to the correct path
         run: mvn surefire-report:report-only
 
-      - name: Upload Maven Site Report
-        if: success()
-        uses: actions/upload-artifact@v3
-        with:
-          name: maven-site
-          path: backend/target/site/  
+      - name: Generate Maven Site Report
+        working-directory: ./backend  # Adjust this to the correct path
+        run: mvn clean site
 
       - name: Upload Surefire Report
         if: success()
@@ -68,6 +61,13 @@ jobs:
         with:
           name: surefire-report
           path: backend/target/site/surefire-report.html
+
+      - name: Upload Maven Site Report
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: maven-site
+          path: backend/target/site/  # Upload the entire site directory
 
   frontend:
     name: Build and Test Frontend
