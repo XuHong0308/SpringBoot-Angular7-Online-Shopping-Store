@@ -36,15 +36,15 @@ jobs:
           sudo -u postgres psql -q -c "CREATE DATABASE mydatabase;"
 
       - name: Build Backend
-        working-directory: ./backend  # Adjust this to the correct path
+        working-directory: ./backend 
         run: mvn install
 
       - name: Generate Maven Site Report
-        working-directory: ./backend  # Adjust this to the correct path
+        working-directory: ./backend  
         run: mvn clean site
 
       - name: Run Backend Tests
-        working-directory: ./backend  # Adjust this to the correct path
+        working-directory: ./backend  
         env:
           DATABASE_URL: "jdbc:postgresql://localhost:5432/mydatabase"
           DATABASE_USER: "postgres"
@@ -52,7 +52,7 @@ jobs:
         run: mvn test
 
       - name: Generate Surefire Report
-        working-directory: ./backend  # Adjust this to the correct path
+        working-directory: ./backend 
         run: mvn surefire-report:report-only
 
       - name: Upload Maven Site Report
@@ -60,7 +60,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: maven-site
-          path: backend/target/site/  # Upload the entire site directory
+          path: backend/target/site/  
 
       - name: Upload Surefire Report
         if: success()
@@ -79,25 +79,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set Node options for OpenSSL
-        run: echo "NODE_OPTIONS=--openssl-legacy-provider" >> $GITHUB_ENV
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '16'
 
       - name: Install Dependencies
-        working-directory: ./frontend  # Adjust this to the correct path
+        working-directory: ./frontend  
         run: npm install
 
       - name: Build Frontend
-        working-directory: ./frontend  # Adjust this to the correct path
+        working-directory: ./frontend 
         run: npm run build
 
-      # - name: Run Bundle Analysis
-      #   working-directory: ./frontend  # Adjust this to the correct path
-      #   run: npm run analyze
+      - name: Run Bundle Analysis
+        working-directory: ./frontend  
+        run: npm run analyze
 
       - name: Upload Bundle Report
         if: success()
