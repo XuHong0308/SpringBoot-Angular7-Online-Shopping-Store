@@ -36,23 +36,20 @@ jobs:
           sudo -u postgres psql -q -c "CREATE DATABASE mydatabase;"
           # Skip creating the postgres user as it already exists
 
-      - name: Configure PostgreSQL to allow external connections (Optional)
-        run: |
-          echo "host all  all    0.0.0.0/0  md5" | sudo tee -a /etc/postgresql/*/main/pg_hba.conf
-          echo "listen_addresses='*'" | sudo tee -a /etc/postgresql/*/main/postgresql.conf
-          sudo service postgresql restart
-
       - name: Build Backend
+        working-directory: ./backend  # Adjust this to the correct path
         run: mvn install
 
       - name: Run Backend Tests
+        working-directory: ./backend  # Adjust this to the correct path
         env:
           DATABASE_URL: "jdbc:postgresql://localhost:5432/mydatabase"
           DATABASE_USER: "postgres"
-          DATABASE_PASSWORD: "12345678"
+          DATABASE_PASSWORD: "E@91e2l52"
         run: mvn test
 
       - name: Generate Backend Reports
+        working-directory: ./backend  # Adjust this to the correct path
         run: mvn surefire-report:report
 
   frontend:
