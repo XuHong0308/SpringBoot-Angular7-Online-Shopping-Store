@@ -107,9 +107,9 @@ jobs:
         working-directory: ./frontend  # Adjust this to the correct path
         run: npm test
 
-      - name: Upload Frontend Test Report
-        if: success()
+      - name: Upload coverage report
+        if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: frontend-test-report
-          path: frontend/coverage/index.html
+          name: coverage-report
+          path: frontend/coverage
