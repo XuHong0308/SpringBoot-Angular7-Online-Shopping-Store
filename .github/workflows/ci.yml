@@ -95,9 +95,9 @@ jobs:
         working-directory: ./frontend  # Adjust this to the correct path
         run: npm run build
 
-      - name: Run Bundle Analysis
-        working-directory: ./frontend  # Adjust this to the correct path
-        run: npm run analyze
+      # - name: Run Bundle Analysis
+      #   working-directory: ./frontend  # Adjust this to the correct path
+      #   run: npm run analyze
 
       - name: Upload Bundle Report
         if: success()
