@@ -39,6 +39,10 @@ jobs:
         working-directory: ./backend  # Adjust this to the correct path
         run: mvn install
 
+      - name: Generate Maven Site Report
+        working-directory: ./backend  # Adjust this to the correct path
+        run: mvn clean site
+
       - name: Run Backend Tests
         working-directory: ./backend  # Adjust this to the correct path
         env:
@@ -51,9 +55,12 @@ jobs:
         working-directory: ./backend  # Adjust this to the correct path
         run: mvn surefire-report:report-only
 
-      - name: Generate Maven Site Report
-        working-directory: ./backend  # Adjust this to the correct path
-        run: mvn clean site
+      - name: Upload Maven Site Report
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: maven-site
+          path: backend/target/site/  # Upload the entire site directory
 
       - name: Upload Surefire Report
         if: success()
@@ -62,12 +69,7 @@ jobs:
           name: surefire-report
           path: backend/target/site/surefire-report.html
 
-      - name: Upload Maven Site Report
-        if: success()
-        uses: actions/upload-artifact@v3
-        with:
-          name: maven-site
-          path: backend/target/site/  # Upload the entire site directory
+      
 
   frontend:
     name: Build and Test Frontend
