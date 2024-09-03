@@ -1,4 +1,4 @@
-name: CI Pipelinee
+name: CI Pipeline
 
 on:
   push:
@@ -29,13 +29,12 @@ jobs:
       - name: Start PostgreSQL service
         run: |
           sudo service postgresql start
-          sudo -u postgres psql -c "SHOW server_version;"
+          sudo -u postgres psql -q -c "SHOW server_version;"
 
-      - name: Set up PostgreSQL DB and user
+      - name: Set up PostgreSQL DB
         run: |
-          sudo -u postgres psql -c "CREATE DATABASE mydatabase;"
-          sudo -u postgres psql -c "CREATE USER postgres WITH ENCRYPTED PASSWORD '12345678';"
-          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE mydatabase TO postgres;"
+          sudo -u postgres psql -q -c "CREATE DATABASE mydatabase;"
+          # Skip creating the postgres user as it already exists
 
       - name: Configure PostgreSQL to allow external connections (Optional)
         run: |
