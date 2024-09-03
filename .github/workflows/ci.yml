@@ -83,14 +83,25 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18.20.4'
-
+          
       - name: Install Dependencies
         working-directory: ./frontend  # Adjust this to the correct path
         run: npm install
 
       - name: Build Frontend
         working-directory: ./frontend  # Adjust this to the correct path
-        run: npm run build -- --stats-json
+        run: npm run build
+
+      - name: Run Bundle Analysis
+        working-directory: ./frontend  # Adjust this to the correct path
+        run: npm run analyze
+
+      - name: Upload Bundle Report
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: bundle-report
+          path: frontend/bundle-report.html  # Adjust this path to where the report is generated
 
       - name: Run Frontend Tests
         working-directory: ./frontend  # Adjust this to the correct path
