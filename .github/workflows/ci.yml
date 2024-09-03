@@ -52,6 +52,13 @@ jobs:
         working-directory: ./backend  # Adjust this to the correct path
         run: mvn surefire-report:report
 
+      - name: Upload Surefire Report
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: surefire-report
+          path: backend/target/site/surefire-report.html  # Path to the report
+          
   frontend:
     name: Build and Test Frontend
     runs-on: ubuntu-latest
