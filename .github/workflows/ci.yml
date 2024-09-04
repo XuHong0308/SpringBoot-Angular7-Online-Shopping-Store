@@ -104,7 +104,7 @@ jobs:
           path: frontend/bundle-report.html
 
       - name: Run Frontend Tests
-        working-directory: ./frontend  # Adjust this to the correct path
+        working-directory: ./frontend/src   # Adjusted to where karma.conf.js is located
         run: npm test
 
       - name: Upload coverage report
