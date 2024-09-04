@@ -55,18 +55,18 @@ jobs:
         working-directory: ./backend 
         run: mvn surefire-report:report-only
 
-      - name: Upload Maven Site Report
+      - name: Upload Backend Building Report
         if: success()
         uses: actions/upload-artifact@v3
         with:
-          name: maven-site
+          name: Backend-building-report
           path: backend/target/site/  
 
-      - name: Upload Surefire Report
+      - name: Upload Backend Test Report
         if: success()
         uses: actions/upload-artifact@v3
         with:
-          name: surefire-report
+          name: Backend-test-report
           path: backend/target/site/surefire-report.html
 
       
@@ -96,21 +96,20 @@ jobs:
         working-directory: ./frontend  
         run: npm run analyze
 
-      - name: Upload Bundle Report
+      - name: Upload Frontend Building Rreport
         if: success()
         uses: actions/upload-artifact@v3
         with:
-          name: bundle-report
+          name: Frontend-building-report
           path: frontend/bundle-report.html
-
       
       - name: Run Frontend Tests
-        working-directory: ./frontend   # Adjusted to where karma.conf.js is located
+        working-directory: ./frontend   
         run: npm test
 
-      - name: Upload coverage report
+      - name: Upload Frontend Test Report
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: coverage-report
+          name: Frontend-test-report
           path: frontend/coverage
