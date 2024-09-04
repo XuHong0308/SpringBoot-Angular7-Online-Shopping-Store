@@ -103,18 +103,10 @@ jobs:
           name: bundle-report
           path: frontend/bundle-report.html
 
-        # Debugging steps to print the working directory and list files
-      - name: Print Working Directory
-        working-directory: ./frontend/src
-        run: pwd
-
-      - name: List Files
-        working-directory: ./frontend/src
-        run: ls -R
-        
+      
       - name: Run Frontend Tests
         working-directory: ./frontend/src   # Adjusted to where karma.conf.js is located
-        run: npm test
+        run: ng test --code-coverage --watch=false --browsers=ChromeHeadless
 
       - name: Upload coverage report
         if: always()
