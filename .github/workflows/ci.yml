@@ -105,6 +105,7 @@ jobs:
 
       
       - name: Run Frontend Tests
+        working-directory: ./frontend   # Adjusted to where karma.conf.js is located
         run: npm test
 
       - name: Upload coverage report
