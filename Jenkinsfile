@@ -16,7 +16,8 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: "${GIT_REPO}"
+                // Checkout code from the "deployment" branch
+                git branch: 'deployment', url: "${GIT_REPO}"
             }
         }
 
