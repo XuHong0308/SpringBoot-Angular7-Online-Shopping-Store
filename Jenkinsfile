@@ -6,7 +6,6 @@ pipeline {
         FRONTEND_IMAGE = 'frontend-image'
         POSTGRES_IMAGE = 'postgres'
         DOCKER_NETWORK = 'my-network'
-        DOCKER_HUB_CREDENTIALS = 'dockerhub-credentials' // Your DockerHub credentials ID in Jenkins
         GIT_REPO = 'https://github.com/XuHong0308/SpringBoot-Angular7-Online-Shopping-Store.git'
         POSTGRES_CONTAINER = 'postgres-container'
         BACKEND_CONTAINER = 'backend-container'
@@ -21,12 +20,27 @@ pipeline {
             }
         }
 
+        stage('Build Backend JAR') {
+            steps {
+                script {
+                    // Build the JAR file for the backend using Maven or Gradle
+                    dir('backend') {
+                        // If using Maven
+                        sh 'mvn clean package'
+
+                        // If using Gradle, replace with:
+                        // sh 'gradle build'
+                    }
+                }
+            }
+        }
+
         stage('Build Backend Image') {
             steps {
                 script {
-                    // Navigate to the backend directory and build backend Docker image
+                    // Build backend Docker image
                     dir('backend') {
-                        docker.build("${BACKEND_IMAGE}")
+                        sh 'docker build -t ${BACKEND_IMAGE} .'
                     }
                 }
             }
@@ -35,9 +49,9 @@ pipeline {
         stage('Build Frontend Image') {
             steps {
                 script {
-                    // Navigate to the frontend directory and build frontend Docker image
+                    // Build frontend Docker image
                     dir('frontend') {
-                        docker.build("${FRONTEND_IMAGE}")
+                        sh 'docker build -t ${FRONTEND_IMAGE} .'
                     }
                 }
             }
