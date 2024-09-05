@@ -38,9 +38,9 @@ pipeline {
         stage('Build Backend Image') {
             steps {
                 script {
-                    // Build backend Docker image
+                    // Build backend Docker image using %BACKEND_IMAGE% for Windows batch script
                     dir('backend') {
-                        bat 'docker build -t ${BACKEND_IMAGE} .'
+                        bat 'docker build -t %BACKEND_IMAGE% .'
                     }
                 }
             }
@@ -49,9 +49,9 @@ pipeline {
         stage('Build Frontend Image') {
             steps {
                 script {
-                    // Build frontend Docker image
+                    // Build frontend Docker image using %FRONTEND_IMAGE%
                     dir('frontend') {
-                        bat 'docker build -t ${FRONTEND_IMAGE} .'
+                        bat 'docker build -t %FRONTEND_IMAGE% .'
                     }
                 }
             }
@@ -61,11 +61,11 @@ pipeline {
             steps {
                 script {
                     // Stop and remove existing PostgreSQL container if running
-                    bat 'docker stop ${POSTGRES_CONTAINER} || true'
-                    bat 'docker rm ${POSTGRES_CONTAINER} || true'
+                    bat 'docker stop %POSTGRES_CONTAINER% || true'
+                    bat 'docker rm %POSTGRES_CONTAINER% || true'
                     
                     // Start PostgreSQL container
-                    bat 'docker run -d --name ${POSTGRES_CONTAINER} --network ${DOCKER_NETWORK} -e POSTGRES_DB=mydatabase -e POSTGRES_USER=myuser -e POSTGRES_PASSWORD=mypassword -p 5432:5432 ${POSTGRES_IMAGE}'
+                    bat 'docker run -d --name %POSTGRES_CONTAINER% --network %DOCKER_NETWORK% -e POSTGRES_DB=mydatabase -e POSTGRES_USER=myuser -e POSTGRES_PASSWORD=mypassword -p 5432:5432 %POSTGRES_IMAGE%'
                 }
             }
         }
@@ -74,11 +74,11 @@ pipeline {
             steps {
                 script {
                     // Stop and remove existing backend container if running
-                    bat 'docker stop ${BACKEND_CONTAINER} || true'
-                    bat 'docker rm ${BACKEND_CONTAINER} || true'
+                    bat 'docker stop %BACKEND_CONTAINER% || true'
+                    bat 'docker rm %BACKEND_CONTAINER% || true'
                     
                     // Start backend container
-                    bat 'docker run -d --name ${BACKEND_CONTAINER} --network ${DOCKER_NETWORK} -e DB_HOST=${POSTGRES_CONTAINER} -e DB_PORT=5432 -e DB_NAME=mydatabase -e DB_USERNAME=myuser -e DB_PASSWORD=mypassword -p 8090:8080 ${BACKEND_IMAGE}'
+                    bat 'docker run -d --name %BACKEND_CONTAINER% --network %DOCKER_NETWORK% -e DB_HOST=%POSTGRES_CONTAINER% -e DB_PORT=5432 -e DB_NAME=mydatabase -e DB_USERNAME=myuser -e DB_PASSWORD=mypassword -p 8090:8080 %BACKEND_IMAGE%'
                 }
             }
         }
@@ -87,11 +87,11 @@ pipeline {
             steps {
                 script {
                     // Stop and remove existing frontend container if running
-                    bat 'docker stop ${FRONTEND_CONTAINER} || true'
-                    bat 'docker rm ${FRONTEND_CONTAINER} || true'
+                    bat 'docker stop %FRONTEND_CONTAINER% || true'
+                    bat 'docker rm %FRONTEND_CONTAINER% || true'
 
                     // Start frontend container
-                    bat 'docker run -d --name ${FRONTEND_CONTAINER} --network ${DOCKER_NETWORK} -p 3000:80 ${FRONTEND_IMAGE}'
+                    bat 'docker run -d --name %FRONTEND_CONTAINER% --network %DOCKER_NETWORK% -p 3000:80 %FRONTEND_IMAGE%'
                 }
             }
         }
