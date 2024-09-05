@@ -20,6 +20,18 @@ pipeline {
             }
         }
 
+         stage('Build Frontend Assets') {
+            steps {
+                script {
+                    // Navigate to the frontend directory and build the frontend files
+                    dir('frontend') {
+                        bat 'npm install'
+                        bat 'npm run build'  // This should create the "dist" folder
+                    }
+                }
+            }
+        }
+
         stage('Build Backend JAR') {
             steps {
                 script {
