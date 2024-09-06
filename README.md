@@ -76,7 +76,7 @@ You can build the image and run the container with Docker.
 cd backend
 mvn package
 ```
-2. Build fontend project
+2. Build frontend project
 ```bash
 cd frontend
 npm install
