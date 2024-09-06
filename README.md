@@ -67,7 +67,7 @@ Start the backend server before the frontend client.
   4. Run `ng serve`
   5. The frontend client is running on [localhost:4200]().
   
-Note: The backend API url is configured in `src/environments/environment.ts` of the frontend project. It is `localhost:8080/api` by default.
+Note: The backend API url is configured in `src/environments/environment.ts` of the frontend project. It is `localhost:8080/api` by default!
   
 #### Run in Docker
 You can build the image and run the container with Docker. 
@@ -76,7 +76,7 @@ You can build the image and run the container with Docker.
 cd backend
 mvn package
 ```
-2. Build fontend project
+2. Build frontend project
 ```bash
 cd frontend
 npm install
