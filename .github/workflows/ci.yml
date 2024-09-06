@@ -1,4 +1,4 @@
-name: CI Pipelinee
+name: CI Pipeline Setup
 
 on:
   push:
@@ -23,34 +23,54 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
 
-      - name: Set up PostgreSQL
+      - name: Install PostgreSQL
         run: sudo apt-get install -y postgresql postgresql-contrib
 
       - name: Start PostgreSQL service
-        run: sudo service postgresql start
-
-      - name: Set up PostgreSQL DB and user
         run: |
-          sudo -u postgres psql -c "CREATE DATABASE mydatabase;"
-          sudo -u postgres psql -c "CREATE USER myuser WITH ENCRYPTED PASSWORD 'mypassword';"
-          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE mydatabase TO myuser;"
+          sudo service postgresql start
+          sudo -u postgres psql -q -c "SHOW server_version;"
+
+      - name: Set up PostgreSQL DB
+        run: |
+          sudo -u postgres psql -q -c "CREATE DATABASE mydatabase;"
 
       - name: Build Backend
+        working-directory: ./backend 
         run: mvn install
 
+      - name: Generate Maven Site Report
+        working-directory: ./backend  
+        run: mvn clean site
+
       - name: Run Backend Tests
+        working-directory: ./backend  
+        env:
+          DATABASE_URL: "jdbc:postgresql://localhost:5432/mydatabase"
+          DATABASE_USER: "postgres"
+          DATABASE_PASSWORD: "E@91e2l52"
         run: mvn test
 
-      - name: Generate Backend Reports
-        run: mvn surefire-report:report
+      - name: Generate Surefire Report
+        working-directory: ./backend 
+        run: mvn surefire-report:report-only
 
-      - name: Upload Surefire Report
+      - name: Upload Backend Building Report
         if: success()
         uses: actions/upload-artifact@v3
         with:
-          name: surefire-report
-          path: backend/target/site/surefire-report.html  # Path to the report
-          
+          name: Backend-building-report
+          path: backend/target/site/  
+
+      - name: Upload Backend Test Report
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Backend-test-report
+          path: backend/target/site/surefire-report.html
+
+      
+
   frontend:
     name: Build and Test Frontend
     runs-on: ubuntu-latest
@@ -62,16 +82,34 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.20.4'
+          node-version: '16.13.0'
 
       - name: Install Dependencies
+        working-directory: ./frontend  
         run: npm install
 
       - name: Build Frontend
-        run: npm run build -- --stats-json
+        working-directory: ./frontend
+        run: npm run build
 
+      - name: Run Bundle Analysis
+        working-directory: ./frontend  
+        run: npm run analyze
+
+      - name: Upload Frontend Building Rreport
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Frontend-building-report
+          path: frontend/bundle-report.html
+      
       - name: Run Frontend Tests
+        working-directory: ./frontend   
         run: npm test
 
-      - name: Generate Coverage Report
-        run: npm test -- --coverage
+      - name: Upload Frontend Test Report
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: Frontend-test-report
+          path: frontend/coverage
