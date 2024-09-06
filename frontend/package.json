@@ -4,11 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
+    "build": "ng build --stats-json",
+    "test": "ng test --code-coverage --watch=false --browsers=ChromeHeadless",
     "lint": "ng lint",
     "e2e": "ng e2e",
+
     "build": "node --openssl-legacy-provider ./node_modules/@angular/cli/bin/ng build --prod"
+
   },
   "private": true,
   "dependencies": {
@@ -50,7 +52,8 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
-    "typescript": "~3.1.6"
+    "typescript": "~3.1.6",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }
 
