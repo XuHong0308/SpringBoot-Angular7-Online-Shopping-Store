@@ -2,14 +2,14 @@
   "name": "shop",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build --stats-json",
-    "test": "ng test --code-coverage --watch=false --browsers=ChromeHeadless",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
-    "analyze": "webpack-bundle-analyzer dist/shop/stats.json --mode static --no-open --report ./bundle-report.html"
-  },
+  "ng": "ng",
+  "start": "ng serve",
+  "build": "./node_modules/@angular/cli/bin/ng build --prod",
+  "test": "ng test",
+  "lint": "ng lint",
+  "e2e": "ng e2e",
+  "analyze": "ng build --prod --stats-json && webpack-bundle-analyzer dist/stats.json"
+},
   "private": true,
   "dependencies": {
     "@angular/animations": "~7.1.0",
@@ -29,6 +29,8 @@
     "tslib": "^1.9.0",
     "zone.js": "~0.8.26"
   },
+
+  
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.11.0",
     "@angular/cli": "~7.1.4",
@@ -48,7 +50,7 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",
-    "typescript": "~3.1.6",
-    "webpack-bundle-analyzer": "^4.10.2"
+    "typescript": "~3.1.6"
   }
 }
+
